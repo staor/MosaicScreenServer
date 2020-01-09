@@ -15,7 +15,7 @@ using Utils;
 using Newtonsoft.Json;
 using RxNS;
 
-namespace MosaicWinToRx
+namespace MosaicWinToRxNS
 {
     public class MosaicWinToRx : IMosaicWinToRx
     {         

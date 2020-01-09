@@ -258,6 +258,104 @@ namespace FromTxRxServer
             return temp;
         }
 
+        public static async Task<Tx> GetHsTxConfigForOne(string txName)
+        {
+
+            Tx tx = null;
+            StringBuilder sb1 = new StringBuilder();
+
+            if (string.IsNullOrEmpty(txName))
+            {
+                return tx;
+            }
+            LIJsonFunction.SendGetHsTxConfigToIdNameJsonFormat f = new LIJsonFunction.SendGetHsTxConfigToIdNameJsonFormat
+            { id = "y", name = "y", ip = "y", port = "y", online = "y", resolution = "y", usb = "y", devType = "y", version = "y", rate = "y" };
+            LIJsonFunction.SendGetHsTxConfigJson sj = new LIJsonFunction.SendGetHsTxConfigJson { json_header = "hscmd-get-hs-tx-config-" + txName, format = f };
+            var jsonString = stringify(sj);
+            try
+            {
+                byte[] rev = await hsServer.Get_TCP_string_UTF8_Async(hsConfig.serverIp, hsConfig.serverPort, 0, jsonString);
+                //hsServer.ShowDebug("GetHsTxConfig-接受查询Tx返回数量：" + rev.Length + "|" + Encoding.UTF8.GetString(rev));
+                using (var ms = new MemoryStream(rev))
+                {
+                    DataContractJsonSerializer deseralizer = new DataContractJsonSerializer(typeof(LIJsonFunction.SendGetHsTxConfigJson));
+                    LIJsonFunction.SendGetHsTxConfigJson model = (LIJsonFunction.SendGetHsTxConfigJson)deseralizer.ReadObject(ms);// //反序列化ReadObject                   
+                    LIJsonFunction.SendGetHsTxConfigToIdNameJsonFormat jsonTx = model.format;
+
+                    if (Tx.DicTx.ContainsKey(jsonTx.id))
+                    {
+                        tx = Tx.DicTx[jsonTx.id];
+                    }
+                    else
+                    {
+                        tx = new Tx(jsonTx.id);
+                    }
+                    tx.Name = jsonTx.name;
+                    if (jsonTx.ip != null)
+                    {
+                        tx.Ip = jsonTx.ip;
+                    }
+                    else
+                    {
+                        tx.Ip = "";
+                    }
+                    if (jsonTx.online != null)
+                    {
+                        tx.Online = jsonTx.online;
+                    }
+                    else
+                    {
+                        tx.Online = "";
+                    }
+                    if (jsonTx.usb != null)
+                    {
+                        tx.Usb = jsonTx.usb;
+                    }
+                    else
+                    {
+                        tx.Usb = "";
+                    }
+                    if (jsonTx.resolution != null)
+                    {
+                        tx.Resolution = jsonTx.resolution;
+                    }
+                    else
+                    {
+                        tx.Resolution = "";
+                    }
+                    if (jsonTx.rate != null)
+                    {
+                        tx.Rate = jsonTx.rate;
+                    }
+                    else
+                    {
+                        tx.Rate = "";
+                    }
+                    if (jsonTx.version != null)
+                    {
+                        tx.Version = jsonTx.version;
+                    }
+                    else
+                    {
+                        tx.Version = "";
+                    }
+                    if (jsonTx.devType != null)
+                    {
+                        tx.DevType = jsonTx.devType;
+                    }
+                    else
+                    {
+                        tx.DevType = "";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                hsServer.ShowDebug("查询Tx.id" + sb1 + " 异常。返回：\r\n" + ex.Message);
+                //throw;
+            }
+            return tx;
+        }
 
         public static string stringify(object jsonObject)
         {

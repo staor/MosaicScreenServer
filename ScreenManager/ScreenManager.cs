@@ -6,6 +6,7 @@ using FromTxRxServer;
 using MosaicServerFrom;
 using MosaicServerFromRx;
 using MosaicServerToStore;
+using MosaicWinToRxNS;
 
 using RxNS;
 
@@ -82,7 +83,12 @@ namespace ScreenManagerNS
                     MosaicServerToStore = new MosaicServerToXml();
                     MosaicServerToStore.Load();
                 }
-
+                if (MosaicWinToRx == null)
+                {
+                    MosaicWinToRx ToRx = new MosaicWinToRx();
+                    ToRx.Load(hsConfig.SendRx_MultiIp, hsConfig.SendRx_MultiPort);
+                    MosaicWinToRx = ToRx;
+                }
                 if (MosaicServerFromManager == null)  //与上层客户端操作交互模块
                 {
                     MosaicServerFromManager = new MosaicServerFromManager();
@@ -1426,8 +1432,7 @@ namespace ScreenManagerNS
             ScreenViewModel screen = null;
             Screens.TryGetValue(idScreen, out screen);
             if (screen != null)
-            {
-                PrePlanInfo info = null;
+            { 
                 bool isOk = screen.Event_DeletePrePlan(name);
                 if (!isOk)
                 {
@@ -1436,13 +1441,7 @@ namespace ScreenManagerNS
                 }
                 else
                 {
-                    if (MosaicServerToStore != null)
-                    {
-                        if (info != null)
-                        {
-                            MosaicServerToStore.DeletePrePlan(idScreen,name);
-                        }
-                    }
+                    MosaicServerToStore?.DeletePrePlan(idScreen, name);
                 }
             }
             else

@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HS xmlns="">
+  <ScreenInfo IdScreen="1" Name="33" Rows="3" Columns="3" StartX="100" StartY="100" WallPixW="5560" WallPixH="3040" IsMirror="False" BindMasterId="0" UnitW="1920" UnitH="1080" GapW="0" GapH="0" Rxid="201 202 203 204 205 206 207 208 209 ">
+    <CurrentWins Wins="1,1002,1,100,100,3740,2060 &#xD;&#xA;" />
+    <Scene Name="1——1" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,2,1321,521,3740,2060 &#xD;&#xA;3,1002,3,2081,579,656,270 &#xD;&#xA;" />
+    <Scene Name="1-2" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,2,100,100,3740,2060 &#xD;&#xA;3,1002,3,100,2160,1820,980 &#xD;&#xA;" />
+    <Scene Name="1-3" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,2,100,100,3740,2060 &#xD;&#xA;3,1002,3,100,2160,1820,980 &#xD;&#xA;4,1002,4,2180,2407,1195,559 &#xD;&#xA;" />
+    <Scene Name="1-4" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,2,100,100,3740,2060 &#xD;&#xA;3,1002,3,100,2160,1820,980 &#xD;&#xA;4,1002,4,2180,2407,1195,559 &#xD;&#xA;5,1002,5,4018,2260,1266,604 &#xD;&#xA;" />
+    <Scene Name="1-5" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,2,100,100,3740,2060 &#xD;&#xA;3,1002,3,100,2160,1820,980 &#xD;&#xA;4,1002,4,2180,2407,1195,559 &#xD;&#xA;5,1002,5,4018,2260,1266,604 &#xD;&#xA;6,1002,6,4345,1346,1153,663 &#xD;&#xA;" />
+    <Scene Name="1-6" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,2,100,100,3740,2060 &#xD;&#xA;3,1002,3,100,2160,1820,980 &#xD;&#xA;4,1002,4,2180,2407,1195,559 &#xD;&#xA;5,1002,5,4018,2260,1266,604 &#xD;&#xA;6,1002,6,4345,1346,1153,663 &#xD;&#xA;7,1002,7,4207,248,1238,707 &#xD;&#xA;" />
+    <Scene Name="1-7" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,7,687,455,623,1171 &#xD;&#xA;3,1002,2,100,2160,1820,980 &#xD;&#xA;4,1002,3,2180,2407,1195,559 &#xD;&#xA;5,1002,4,4018,2260,1266,604 &#xD;&#xA;6,1002,5,4345,1346,1153,663 &#xD;&#xA;7,1002,6,4207,248,1238,707 &#xD;&#xA;" />
+    <Scene Name="1-8" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,7,687,455,623,1171 &#xD;&#xA;3,1002,2,100,2160,1820,980 &#xD;&#xA;4,1002,3,2180,2407,1195,559 &#xD;&#xA;5,1002,4,4018,2260,1266,604 &#xD;&#xA;6,1002,5,4345,1346,1153,663 &#xD;&#xA;7,1002,6,4207,248,1238,707 &#xD;&#xA;8,1002,8,1632,713,548,832 &#xD;&#xA;" />
+    <Scene Name="1-9" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,7,687,455,623,1171 &#xD;&#xA;3,1002,2,100,2160,1820,980 &#xD;&#xA;4,1002,3,2180,2407,1195,559 &#xD;&#xA;5,1002,4,4018,2260,1266,604 &#xD;&#xA;6,1002,5,4345,1346,1153,663 &#xD;&#xA;7,1002,6,4207,248,1238,707 &#xD;&#xA;8,1002,8,1632,713,548,832 &#xD;&#xA;9,1002,9,2435,352,723,574 &#xD;&#xA;" />
+    <Scene Name="1-10" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,7,687,455,623,1171 &#xD;&#xA;3,1002,2,100,2160,1820,980 &#xD;&#xA;4,1002,3,2180,2407,1195,559 &#xD;&#xA;5,1002,4,4018,2260,1266,604 &#xD;&#xA;6,1002,5,4345,1346,1153,663 &#xD;&#xA;7,1002,6,4207,248,1238,707 &#xD;&#xA;8,1002,8,1632,713,548,832 &#xD;&#xA;9,1002,9,2435,352,723,574 &#xD;&#xA;10,1002,10,2535,1324,921,648 &#xD;&#xA;" />
+    <Scene Name="1-11" ListWins="1,1002,1,3673,885,159,510 &#xD;&#xA;2,1002,7,687,455,623,1171 &#xD;&#xA;3,1002,2,100,2160,1820,980 &#xD;&#xA;4,1002,3,2180,2407,1195,559 &#xD;&#xA;5,1002,4,4018,2260,1266,604 &#xD;&#xA;6,1002,5,4345,1346,1153,663 &#xD;&#xA;7,1002,6,4207,248,1238,707 &#xD;&#xA;8,1002,8,1632,713,548,832 &#xD;&#xA;9,1002,9,2435,352,723,574 &#xD;&#xA;10,1002,10,2535,1324,921,648 &#xD;&#xA;11,1002,11,214,241,1649,582 &#xD;&#xA;" />
+    <Scene Name="111111111111" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="场景场景场景场景场景场景" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="222222222" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="3333333" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="444444444" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="5555555555" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="666666666666" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="777777777777" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="888888888888" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="999999999999" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="1010" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="11" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="12" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="13" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="14" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="15" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <Scene Name="16" ListWins="1,1002,1,1207,676,2906,1841 &#xD;&#xA;" />
+    <PrePlan Name="1" SwiInterval="0" />
+    <PrePlan Name="2" SwiInterval="0" />
+    <PrePlan Name="3" SwiInterval="0" />
+    <PrePlan Name="4" SwiInterval="0" />
+    <PrePlan Name="5" SwiInterval="0" />
+    <PrePlan Name="6" SwiInterval="0" />
+    <PrePlan Name="7" SwiInterval="0" />
+    <PrePlan Name="8" SwiInterval="0" />
+    <PrePlan Name="9" SwiInterval="0" />
+    <PrePlan Name="10" SwiInterval="0" />
+    <PrePlan Name="11" SwiInterval="0" />
+    <PrePlan Name="12" SwiInterval="0" />
+    <PrePlan Name="13" SwiInterval="0" />
+    <PrePlan Name="14" SwiInterval="0" />
+    <PrePlan Name="15" SwiInterval="0" />
+    <PrePlan Name="16" SwiInterval="0" />
+    <PrePlan Name="17" SwiInterval="0" />
+    <PrePlan Name="18" SwiInterval="0" />
+    <PrePlan Name="19" SwiInterval="0" />
+    <PrePlan Name="" SwiInterval="0" />
+    <PrePlan Name="22" SwiInterval="0" />
+    <PrePlan Name="23" SwiInterval="0" />
+    <PrePlan Name="2345" SwiInterval="0" />
+    <PrePlan Name="26" SwiInterval="0" />
+    <PrePlan Name="27" SwiInterval="0" />
+  </ScreenInfo>
+  <ScreenInfo IdScreen="2" Name="2x2" Rows="2" Columns="2" StartX="0" StartY="0" WallPixW="3840" WallPixH="2160" IsMirror="False" BindMasterId="0" UnitW="1920" UnitH="1080" GapW="0" GapH="0" Rxid="301 302 303 304 ">
+    <CurrentWins Wins="1,1002,1,1790,840,287,433 &#xD;&#xA;" />
+  </ScreenInfo>
+  <ScreenInfo IdScreen="3" Name="测试" Rows="1" Columns="1" StartX="0" StartY="0" WallPixW="1920" WallPixH="1080" IsMirror="False" BindMasterId="0" UnitW="1920" UnitH="1080" GapW="0" GapH="0" Rxid="305 ">
+    <CurrentWins Wins="" />
+  </ScreenInfo>
+  <ScreenInfo IdScreen="4" Name="出生2" Rows="1" Columns="1" StartX="0" StartY="0" WallPixW="1920" WallPixH="1080" IsMirror="False" BindMasterId="0" UnitW="1920" UnitH="1080" GapW="0" GapH="0" Rxid="306 ">
+    <CurrentWins Wins="1,1002,1,0,0,400,360 &#xD;&#xA;2,0004,2,1367,84,411,431 &#xD;&#xA;" />
+    <Scene Name="1" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <Scene Name="2" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <Scene Name="3" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <Scene Name="4" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <Scene Name="5" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <Scene Name="6" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <Scene Name="7" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <Scene Name="8" ListWins="1,1002,1,243,131,400,360 &#xD;&#xA;" />
+    <PrePlan Name="2" SwiInterval="0" />
+    <PrePlan Name="预案4" SwiInterval="3">
+      <SceneName>1</SceneName>
+      <SceneName>3</SceneName>
+      <SceneName>4</SceneName>
+    </PrePlan>
+    <Scene Name="预案1" ListWins="" />
+    <Scene Name="1-2" ListWins="1,1002,1,0,0,400,360 &#xD;&#xA;2,0004,2,1367,84,411,431 &#xD;&#xA;" />
+    <Scene Name="1-3" ListWins="1,1002,1,0,0,400,360 &#xD;&#xA;2,0004,2,1367,84,411,431 &#xD;&#xA;3,0004,3,523,317,771,633 &#xD;&#xA;" />
+    <PrePlan Name="预案3" SwiInterval="2">
+      <SceneName>1</SceneName>
+      <SceneName>1-2</SceneName>
+      <SceneName>1-3</SceneName>
+    </PrePlan>
+    <Scene Name="特殊场景分割,1" ListWins="1,1002,1,0,0,400,360 &#xD;&#xA;2,0004,2,1367,84,411,431 &#xD;&#xA;" />
+    <PrePlan Name="预案测试场景分割" SwiInterval="0">
+      <SceneName>特殊场景分割,1</SceneName>
+      <SceneName>2</SceneName>
+    </PrePlan>
+    <PrePlan Name="预案2" SwiInterval="1" />
+  </ScreenInfo>
+  <ScreenInfo IdScreen="5" Name="1213" Rows="1" Columns="1" StartX="0" StartY="0" WallPixW="1920" WallPixH="1080" IsMirror="False" BindMasterId="0" UnitW="1920" UnitH="1080" GapW="0" GapH="0" Rxid="">
+    <CurrentWins Wins="" />
+  </ScreenInfo>
+  <ScreenInfo IdScreen="6" Name="123123" Rows="1" Columns="1" StartX="0" StartY="0" WallPixW="1920" WallPixH="1080" IsMirror="False" BindMasterId="0" UnitW="1920" UnitH="1080" GapW="0" GapH="0" Rxid="">
+    <CurrentWins Wins="" />
+  </ScreenInfo>
+</HS>

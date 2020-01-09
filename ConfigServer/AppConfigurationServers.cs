@@ -15,16 +15,20 @@ namespace ConfigServer
         static AppConfigurationServers()
         {
             //ReloadOnChange = true 当appsettings.json被修改时重新加载 
-            Configuration = new ConfigurationBuilder()  //.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json") //你配置的文件
-                .Add(new JsonConfigurationSource
-                {
-                    Path = "appsettings.json", ReloadOnChange = true
-                })
-                .AddJsonFile("appsettings.json", true,reloadOnChange:true)
-                .Build()
+            //Configuration = new ConfigurationBuilder()  //.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json") //你配置的文件
+            //    .Add(new JsonConfigurationSource
+            //    {
+            //        Path = "appsettings.json", ReloadOnChange = true
+            //    })
+            //    .AddJsonFile("appsettings.json", true,reloadOnChange:true)
+            //    .Build()
                 
-                ;
+            //    ;
+            //var serviceSettings = new ServiceSettings();
+            //configuration.GetSection("Service").Bind(serviceSettings);
 
+
+            //ConfigurationBuilder.Build().Bind(configModel);  //Microsoft.Extensions.Configuration.Binder
             //LoadAppConfig();
 
 

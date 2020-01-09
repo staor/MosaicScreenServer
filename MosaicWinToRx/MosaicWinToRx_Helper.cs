@@ -12,7 +12,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MosaicWinToRx
+namespace MosaicWinToRxNS
 {
     public static class MosaicWinToRx_Helper
     {

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<HS xmlns="">
+  <Txes>
+       <Tx id="1002" name="测试视频流" devType="测试摄像头" ip="" tcpPort="" udp_addr="200.200.100.254" udp_port="20100" stream="H:\testingVideo\猫和老鼠03.rm"/>
+
+
+  </Txes>
+  <Rxes>
+   
+
+  </Rxes>
+</HS>

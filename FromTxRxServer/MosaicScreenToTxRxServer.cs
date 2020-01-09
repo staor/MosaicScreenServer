@@ -66,75 +66,66 @@ namespace FromTxRxServer
             }
             else if (msges[0] == "online")  
             {
-                
-                //online::0002::1G-M::Tx
-                if (msges.Length >= 3)
+
+                //online::0002::1G-M::TX 
+                if (msges.Length >= 4 && msges[3].Trim().ToUpper() == "TX")
                 {
                     string txId = msges[1];
-                    if (TxInfo.DicTxInfo.ContainsKey(txId))
-                    {
-                        TxInfo txInfo = TxInfo.DicTxInfo[txId];
-                        txInfo.Online = msges[2];
-                        ActionTxInfoOnline?.Invoke(txInfo);
+                    string online1 = DateTime.Now.ToString();
+                    hsServer.ShowDebug("当前收到上线通知：" + online1 + "----" + msg);
 
-                        hsServer.ShowDebug("UI获取TxRxServer组播消息：" + msg);
+                    await Task.Delay(3000);  //resolution不会立即更新
+                    var item = await MosaicScreenToTxRxServer_Helper.GetHsTxConfigForOne(txId);
+                    if (item == null)
+                    {
+                        hsServer.ShowDebug("GetHsTxConfigForOne-查询返回为空：" + txId);
+                        return;
+                    }
+                    string online2 = DateTime.Now.ToString();
+                    hsServer.ShowDebug("当前信号resolution查询结果时间：" + online2 + "----" + item.Resolution);
+
+                    if (item.DevType.Contains("MULTIv4") | item.DevType.Contains("MULTIv5"))  //TX-KVM-MULTIv4-H-SL  :表示为双流Tx 设备类型 4代1080P TX-KVM-MULTIv5-H-SL  :表示为双流Tx 设备类型 5代
+                    {
+                        hsServer.ShowDebug("UI获取TxRxServer组播双流Tx上线消息：" + msg);
+
+                        TxInfo txInfo = null;
+                        if (TxInfo.DicTxInfo.ContainsKey(item.Id))
+                        {
+                            txInfo = TxInfo.DicTxInfo[item.Id];
+                        }
+                        else
+                        {
+                            txInfo = new TxInfo(item.Id);
+                        }
+                        txInfo.Name = item.Name;
+                        txInfo.DevType = item.DevType;
+                        txInfo.Ip = item.Ip;
+                        txInfo.TcpPort = item.Port;
+                        txInfo.Version = item.Version;
+                        txInfo.Online = item.Online;
+                        txInfo.Resolution = item.Resolution;
+                        txInfo.Rate = item.Rate;
+                        txInfo.EncodeFormat = item.EncodeFormat;
+                        txInfo.Ts_addr = item.MultiIp;
+                        txInfo.Ts_port = item.MultiPort;
+
+                        string[] arrayIp = item.Ip.Split('.');
+                        if (arrayIp.Length == 4)
+                        {
+                            txInfo.Udp_addr = "228.228." + arrayIp[2] + "." + arrayIp[3];  //169.254.100.1 >>228.228.100.1  默认端口20100
+                            txInfo.Stream = @"rtsp://200.200." + arrayIp[2] + "." + arrayIp[3] + @":554/live/stream";            //rtsp://200.200.100.1:554/live/stream
+                        }
+                        else
+                        {
+                            hsServer.ShowDebug("Tx新增上线同步通知-Ip解析长度不为4？");
+                        }
+                        //hsServer.ShowDebug("UI获取TxRxServer组播消息：" + msg);
+                        //hsServer.ShowDebug("Tx上线查询Resolution：" + item.Resolution);
+                        ActionTxInfoOnline?.Invoke(txInfo);
                     }
                     else
                     {
-                        if (msges.Length == 4 && msges[3] == "Tx"&&!Tx.DicTx.ContainsKey(txId))  //动态查询是否新增双流Tx
-                        {
-                            //此时需要延时几秒钟再此查询，否则显示resolution为"";
-                            await Task.Delay(3000);
-                            var ListTx = await MosaicScreenToTxRxServer_Helper.GetHsTxConfig(new List<string>() { txId });
-                            if (ListTx.Count > 0)
-                            {
-                                var item = ListTx[0];
-                                if (item.DevType.Contains("MULTIv4") | item.DevType.Contains("MULTIv5"))  //TX-KVM-MULTIv4-H-SL  :表示为双流Tx 设备类型 4代1080P TX-KVM-MULTIv5-H-SL  :表示为双流Tx 设备类型 5代
-                                {
-                                    TxInfo txInfo = null;
-                                    if (TxInfo.DicTxInfo.ContainsKey(item.Id))
-                                    {
-                                        txInfo = TxInfo.DicTxInfo[item.Id];
-                                    }
-                                    else
-                                    {
-                                        txInfo = new TxInfo(item.Id);
-                                    }
-                                    txInfo.Name = item.Name;
-                                    txInfo.DevType = item.DevType;
-                                    txInfo.Ip = item.Ip;
-                                    txInfo.TcpPort = item.Port;
-                                    txInfo.Version = item.Version;
-                                    txInfo.Online = item.Online;
-                                    txInfo.Resolution = item.Resolution;
-                                    txInfo.Rate = item.Rate;
-                                    txInfo.EncodeFormat = item.EncodeFormat;
-                                    txInfo.Ts_addr = item.MultiIp;
-                                    txInfo.Ts_port = item.MultiPort;
-
-                                    string[] arrayIp = item.Ip.Split('.');
-                                    if (arrayIp.Length == 4)
-                                    {
-                                        txInfo.Udp_addr = "228.228." + arrayIp[2] + "." + arrayIp[3];  //169.254.100.1 >>228.228.100.1  默认端口20100
-                                        txInfo.Stream = @"rtsp://200.200." + arrayIp[2] + "." + arrayIp[3] + @":554/live/stream";            //rtsp://200.200.100.1:554/live/stream
-                                    }
-                                    else
-                                    {
-                                        hsServer.ShowDebug("Tx新增上线同步通知-Ip解析长度不为4？");
-                                    }
-
-                                    //hsServer.ShowDebug("UI获取TxRxServer组播消息：" + msg);
-                                    //hsServer.ShowDebug("Tx上线查询Resolution：" + item.Resolution);
-                                    ActionTxInfoOnline?.Invoke(txInfo);
-
-                                    
-                                }
-                            }
-                            else
-                            {
-                                hsServer.ShowDebug("查询双流Tx返回：" + txId+"为空");
-                            }
-                        }
+                        hsServer.ShowDebug("查询双流Tx返回：" + txId + "为空");
                     }
                 }
             }

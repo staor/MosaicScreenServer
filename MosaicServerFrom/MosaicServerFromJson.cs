@@ -58,7 +58,7 @@ namespace MosaicServerFrom
             TcpClient client = listener.EndAcceptTcpClient(ar);
             listener.BeginAcceptTcpClient(DoAcceptTcpClientCallback, listener);
             NetworkStream stream = client.GetStream();
-            StringBuilder data = new StringBuilder();
+            List<byte> data = new List<byte>();
             byte[] bytes = new byte[BuffRcv];
             // Loop to receive all the data sent by the client.
             try
@@ -66,11 +66,20 @@ namespace MosaicServerFrom
                 do
                 {
                     int i = stream.Read(bytes, 0, bytes.Length);
-                    data.Append(System.Text.Encoding.UTF8.GetString(bytes, 0, i));
+                    if (i < BuffRcv)
+                    {
+                        byte[] temp = new byte[i];
+                        Buffer.BlockCopy(bytes, 0, temp, 0, i);
+                        data.AddRange(temp);
+                    }
+                    else
+                    {
+                        data.AddRange(bytes);
+                    }
                     bytes = new byte[BuffRcv];
                 }
                 while (stream.DataAvailable);
-                string rcvClient = data.ToString();
+                string rcvClient = Encoding.UTF8.GetString(data.ToArray());
                 hsServer.ShowDebug("Server收到客户端消息：" + client.Client.RemoteEndPoint + "|--" + rcvClient);
                 string rcv = Event_FromJson?.Invoke(rcvClient);
                 byte[] msg = System.Text.Encoding.UTF8.GetBytes(rcv);
