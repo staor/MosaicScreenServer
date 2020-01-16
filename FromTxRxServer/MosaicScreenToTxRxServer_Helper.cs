@@ -371,80 +371,8 @@ namespace FromTxRxServer
         public static int ServerRcvMultiPort = 32008;
         public static UdpClient ServerMultiUdpClient = null;
 
-        public static void ServerUdpMulticastListener(string multiIp, int multiPort)
-        {
-            //ParameterizedThreadStart p = new ParameterizedThreadStart(ReceivThreadEventHandler);
-            //if (!IsChating)
-            //{
-            //    IsChating = true;
-            //}
-            UdpClient client = null;
-
-            try
-            {
-                if (client == null)
-                {
-                    client = new UdpClient();
-                    client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                    client.Client.Bind(new IPEndPoint(IPAddress.Any, multiPort));
-
-                    client.JoinMulticastGroup(IPAddress.Parse(multiIp));
-                    ServerMultiUdpClient = client;
-                    client.BeginReceive(new AsyncCallback(UdpRcvMultiMsgAsyncBack), client);
-
-                }
-                hsServer.ShowDebug("加入TxRx服务器同步信息组播频道：" + multiIp + ":" + multiPort);
-            }
-            catch (Exception ex)
-            {
-                if (client != null)
-                {
-                    client.Close();
-                }
-                hsServer.ShowDebug("加入TxRx服务端组播异常UdpMulticastServerListener：" + multiIp + ":" + multiPort + " || " + ex.Message);
-                //throw;
-            }
-            finally
-            {
-                //if (client != null)
-                //{
-                //    client.Close();
-                //}
-            }
-
-
-            //Thread th = new Thread(ReceivThreadEventHandler);
-            //th.IsBackground = true;
-            //th.Start();
-        }
-        private static void UdpRcvMultiMsgAsyncBack(IAsyncResult state)
-        {
-            UdpClient udpClient = null;
-            try
-            {
-                udpClient = (UdpClient)state.AsyncState;
-                IPEndPoint endPoint = (IPEndPoint)udpClient.Client.LocalEndPoint;
-
-                byte[] bytes = udpClient.EndReceive(state, ref endPoint);
-                string msg = Encoding.UTF8.GetString(bytes);  //HS的json格式为utf-8
-                RcvMulticastServerMsgEvent?.BeginInvoke(msg, null, null);
-                //App.Current.Dispatcher.Invoke(RcvMulticastServerMsgEvent, msg);
-                //ShowDebug("接受组播消息：" + msg);
-                //Console.WriteLine(value);
-                //// 在这里使用异步委托来处理接收到的数组，并再次启动接收
-                var ar = udpClient.BeginReceive(new AsyncCallback(UdpRcvMultiMsgAsyncBack), udpClient);
-            }
-            catch (Exception ex)
-            {
-                if (udpClient != null)
-                {
-                    udpClient.Close();
-                }
-                hsServer.ShowDebug("UdpRcvMultiMsgAsyncBack-Udp组播侦听异常退出" + ex.Message);
-                return;
-                //throw;
-            }
-        }
+      
+      
 
         private static int heartBeatNo = 0; //调试信息显示次数
         public static async Task<bool> SendHeartBeatAsync()

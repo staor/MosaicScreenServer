@@ -541,9 +541,37 @@ namespace MosaicServerToStore
             } 
         }
 
+        public static void UpdateHsXmlToList(string path, List<string> nodes, List<string> attributes, List<string> values)
+        {
+            if (attributes == null || values == null || attributes.Count != values.Count || nodes.Count != attributes.Count)
+            {
+                Logger.Error("UpdateHsXmlToList-的参数中两个列表数量不对称或为null!,将忽略处理");
+                return;
+            }
+            XmlDocument doc = null;
+            try
+            {
+                doc = new XmlDocument();
+                doc.Load(path);
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    XmlNode xn = doc.SelectSingleNode(nodes[i]);
+                    XmlElement xe = (XmlElement)xn;
+                    xe.SetAttribute(attributes[i], values[i]); //原<ID Num="3">888</ID> 改变<ID Num="999">888</ID>    XMLHelper.Update(path, "PersonF/person[@Name='Person3']/ID", "Num", "999"); 
+                }
+
+                doc.Save(path);   //此处适配在三百多个大屏下保存当前窗口的优化，否则易出现正常关机时大屏当前窗口还未保存完全。
+            }
+            catch (Exception e)
+            {
+                Logger.Error("UpdateHsXmlToList-异常：" + e.Message);
+                Console.WriteLine(e.Message);
+            }
+        }
+
 
         #region GetXmlTx
-        
+
 
         #endregion
 

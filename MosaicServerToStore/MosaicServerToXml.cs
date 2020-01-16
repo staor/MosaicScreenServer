@@ -3,6 +3,7 @@ using ScreenManagerNS;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Utils;
 
 namespace MosaicServerToStore
 {
@@ -48,7 +49,7 @@ namespace MosaicServerToStore
       
         public void Load()
         {
-            //hsServer.GetXmlTxInfo("HS/Txes/Tx"); //结合查询服务器的xmlHS中的TxInfo
+            hsServer.GetXmlTxInfo("HS/Txes/Tx"); //结合查询服务器的xmlHS中的TxInfo
 
             MosaicServerToXml_Helper.GetXmlMosaicScreenInfo("HS/ScreenInfo", DicNameToMosaicScreenInfo, DicIdToMosaicScreenInfo);  //返回列表中有可能有重复的Id /Name 
             foreach (var item in DicIdToMosaicScreenInfo)
@@ -219,31 +220,45 @@ namespace MosaicServerToStore
                 }
             }
         }
-        public void SaveCurrentWins(HsScreenInfo screenInfo)
+         
+
+        public void SaveCurrentWins(List<HsScreenInfo> screenInfos)
         {
-            StringBuilder sb = new StringBuilder();
+            List<string> nodes = new List<string>();
+            List<string> attributes = new List<string>();
+            List<string> values = new List<string>();
+            string strAttribute = "Wins";
+
             string splite1 = ",";
             string splite2 = " ";
-            foreach (var item in screenInfo.CurrentWins)
+            foreach (var info in screenInfos)
             {
-                sb.Append(item.IdWin);
-                sb.Append(splite1);
-                sb.Append(item.IdTx);
-                sb.Append(splite1);
-                sb.Append(item.ZIndex);
-                sb.Append(splite1);
-                sb.Append(item.X);
-                sb.Append(splite1);
-                sb.Append(item.Y);
-                sb.Append(splite1);
-                sb.Append(item.Width);
-                sb.Append(splite1);
-                sb.Append(item.Height);
-                sb.Append(splite2);
-                sb.AppendLine();
+                nodes.Add($"{MosaicServerToXml_Helper.xmlNodeMosaicScreenInfo}/ScreenInfo[@IdScreen = '{info.IdScreen}']/CurrentWins");
+                attributes.Add(strAttribute);
+                StringBuilder sb = new StringBuilder();
+                foreach (var item in info.CurrentWins)
+                {
+                    sb.Append(item.IdWin);
+                    sb.Append(splite1);
+                    sb.Append(item.IdTx);
+                    sb.Append(splite1);
+                    sb.Append(item.ZIndex);
+                    sb.Append(splite1);
+                    sb.Append(item.X);
+                    sb.Append(splite1);
+                    sb.Append(item.Y);
+                    sb.Append(splite1);
+                    sb.Append(item.Width);
+                    sb.Append(splite1);
+                    sb.Append(item.Height);
+                    sb.Append(splite2);
+                    sb.AppendLine();
+                }
+                values.Add(sb.ToString());
             }
-            MosaicServerToXml_Helper.UpdateHsXml(MosaicServerToXml_Helper.xmlPathMosaicScreenInfo, MosaicServerToXml_Helper.xmlNodeMosaicScreenInfo + "/ScreenInfo[@IdScreen='" + screenInfo.IdScreen + "']" + "/CurrentWins", new List<string> { "Wins" }, new List<string> { sb.ToString() });
-            
+
+            MosaicServerToXml_Helper.UpdateHsXmlToList(MosaicServerToXml_Helper.xmlPathMosaicScreenInfo, nodes, attributes, values);
+
         }
 
         public List<HsScreenInfo> GetAllScreenInfo()

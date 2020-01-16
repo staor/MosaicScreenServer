@@ -8,6 +8,8 @@ using System.Net.Sockets;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using TxNS;
 
 namespace Utils
 {
@@ -28,7 +30,162 @@ namespace Utils
                 return Encoding.UTF8.GetString(ms.ToArray());
             }
         }
-        
+
+
+        static XmlDocument _xmlDocument = null;
+        public static XmlDocument xmlDocument
+        {
+            get
+            {
+                if (_xmlDocument == null)
+                {
+                    hsServer.LoadServer();
+                }
+                return _xmlDocument;
+            }
+        }
+
+        public static void LoadServer()
+        {
+            try
+            {
+                if (_xmlDocument == null)
+                {
+                    _xmlDocument = new XmlDocument();
+                    XmlReaderSettings settings = new XmlReaderSettings();
+                    settings.IgnoreComments = true;
+                    XmlReader reader = XmlReader.Create(@"xmlHS.xml", settings);
+                    _xmlDocument.Load(reader);
+                    reader.Close();
+                    //_xmlDocument.LoadXml(@"..\xmlHS.xml");//@"..\..\Book.xml"
+                }
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("加载xml文件出错" + ex.Message);  //若出错则异常崩溃，没有提示！
+                hsServer.ShowDebug("加载-xmlHS-文件出错：" + ex.Message);
+            }
+        }
+
+        public static List<TxInfo> GetXmlTxInfo(string path)
+        {
+            List<TxInfo> listTx = new List<TxInfo>();
+            if (hsServer.xmlDocument == null)
+            {
+                return listTx;
+            }
+            try
+            {
+                XmlNodeList nodeList = hsServer.xmlDocument.SelectNodes(path);  //如 HS/Equipments/Equipment  或HS/Rooms/RoomStatus
+                                                                                //XmlNodeList nodeList = xmldoc.SelectNodes(path);  //如 HS/Equipments/Equipment  或HS/Rooms/RoomStatus
+                foreach (XmlNode item in nodeList)
+                {
+                    XmlNode currentNode = item;
+                    XmlAttributeCollection xmlAttr = item.Attributes;
+                    TxInfo tx = new TxInfo();
+                    foreach (XmlAttribute attr in xmlAttr)
+                    {
+                        if (attr.Name == "id")
+                        {
+                            tx.Id = attr.Value;
+                        }
+                        else if (attr.Name == "multiIp")
+                        {
+                            if (!string.IsNullOrEmpty(attr.Value))
+                            {
+                                tx.Ts_addr = attr.Value;
+                            }
+                        }
+                        else if (attr.Name == "multiPort")
+                        {
+                            if (!string.IsNullOrEmpty(attr.Value))
+                            {
+                                tx.Ts_port = int.Parse(attr.Value);
+                            }
+                        }
+
+                        else if (attr.Name == "stream")
+                        {
+                            if (!string.IsNullOrEmpty(attr.Value))
+                            {
+                                tx.Stream = attr.Value;
+                            }
+                        }
+                        else if (attr.Name == "videoIp")
+                        {
+                            if (!string.IsNullOrEmpty(attr.Value))
+                            {
+                                tx.Udp_addr = attr.Value;
+                            }
+                        }
+                        else if (attr.Name == "videoPort")
+                        {
+                            if (!string.IsNullOrEmpty(attr.Value))
+                            {
+                                tx.Udp_port = int.Parse(attr.Value);
+                            }
+                        }
+                        else if (attr.Name == "name")
+                        {
+                            if (!string.IsNullOrEmpty(attr.Value))
+                            {
+                                tx.Name = attr.Value;
+                            }
+                        }
+                        else if (attr.Name == "devType")
+                        {
+                            if (!string.IsNullOrEmpty(attr.Value))
+                            {
+                                tx.DevType = attr.Value;
+                            }
+                        }
+
+                    }
+                    if (TxInfo.DicTxInfo.ContainsKey(tx.Id))
+                    {
+                        TxInfo info = TxInfo.DicTxInfo[tx.Id];
+                        if (!string.IsNullOrEmpty(info.Name))
+                        {
+                            info.Name = tx.Name;
+                        }
+                        if (!string.IsNullOrEmpty(info.Udp_addr))
+                        {
+                            info.Udp_addr = tx.Udp_addr;
+                        }
+                        if (info.Udp_port == 0)
+                        {
+                            info.Udp_port = tx.Udp_port;
+                        }
+                        if (!string.IsNullOrEmpty(info.Stream))
+                        {
+                            info.Udp_addr = tx.Stream;
+                        }
+                        if (!string.IsNullOrEmpty(info.DevType))
+                        {
+                            info.DevType = tx.DevType;
+                        }
+                        listTx.Add(info);
+                    }
+                    else
+                    {
+                        TxInfo newTx = new TxInfo(tx.Id);
+                        newTx.Name = tx.Name;
+                        newTx.DevType = tx.DevType;
+                        newTx.Udp_addr = tx.Udp_addr;
+                        newTx.Udp_port = tx.Udp_port;
+                        newTx.Stream = tx.Stream;
+                        listTx.Add(newTx);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowDebug("GetXmlTxInfo-异常：" + ex.Message);
+            }
+            hsServer.ShowDebug("xml存储TxInfo数量：" + listTx.Count);
+            return listTx;
+        }
+
     }
 
     partial class hsServer

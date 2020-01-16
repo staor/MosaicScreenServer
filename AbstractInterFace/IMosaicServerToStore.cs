@@ -28,7 +28,7 @@ namespace AbstractInterFace
 
         void ModifyPrePlanName(int idScreen,string oldName, string newName);
         // 当前大屏窗口信息
-        void SaveCurrentWins(HsScreenInfo screenInfo);
+        void SaveCurrentWins(List<HsScreenInfo> screenInfos);
         void GetCurrentWins(HsScreenInfo screenInfo);
     }
 }

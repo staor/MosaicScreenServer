@@ -32,7 +32,7 @@ namespace MosaicScreenServer
                 //bgtask.Wait();   //等待 testService 结束执行
 
                 ScreenManager?.SaveScreenCurrentWinsToStore();
-                Console.WriteLine($"{DateTime.Now} 恭喜，服务程序已正常退出！");
+                Console.WriteLine($"{DateTime.Now} 稍后，服务程序将正常退出！");
                 Environment.Exit(0);
             };
 

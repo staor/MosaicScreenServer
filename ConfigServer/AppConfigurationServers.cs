@@ -119,6 +119,9 @@ namespace ConfigServer
                 hsConfig.SendRx_MultiPort = int.Parse(ConfigurationManager.AppSettings["SendRx_MultiPort"]);
 
                 hsConfig.WinRectRate = double.Parse(ConfigurationManager.AppSettings["WinRectRate"]);
+                hsConfig.TxOnlineToResolution = int.Parse(ConfigurationManager.AppSettings["TxOnlineToResolution"]);
+                hsConfig.MirrorWinRectRate = double.Parse(ConfigurationManager.AppSettings["MirrorWinRectRate"]);
+
             }
             catch (Exception ex)
             {

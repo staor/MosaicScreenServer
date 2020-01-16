@@ -250,23 +250,41 @@ namespace ScreenManagerNS
             Event.Event_GetTxes += Event_GetTxes;
         }
 
+        //public void SaveScreenCurrentWinsToStore()
+        //{
+        //    if (MosaicServerToStore != null)
+        //    {
+        //        foreach (var item in Screens)
+        //        {
+        //            ScreenViewModel screen = item.Value;
+        //            screen.CurrentWins.Clear();
+        //            foreach (var win in screen.ListRoamWines)
+        //            {
+        //                if (win.IsEnable)
+        //                {
+        //                    screen.CurrentWins.Add(win);
+        //                }
+        //            }
+        //            MosaicServerToStore.SaveCurrentWins(screen);
+        //        }
+        //    }
+        //}
+
         public void SaveScreenCurrentWinsToStore()
         {
             if (MosaicServerToStore != null)
             {
+                List<HsScreenInfo> listInfos = new List<HsScreenInfo>();
                 foreach (var item in Screens)
                 {
-                    ScreenViewModel screen = item.Value;
-                    screen.CurrentWins.Clear();
-                    foreach (var win in screen.ListRoamWines)
+                    if (item.Value.IsMirror || item.Value.ScreenRxInfos.Count == 0)
                     {
-                        if (win.IsEnable)
-                        {
-                            screen.CurrentWins.Add(win);
-                        }
+                        continue;
                     }
-                    MosaicServerToStore.SaveCurrentWins(screen);
+                    item.Value.UpdateCurrentViewModelWinToInfo();
+                    listInfos.Add(item.Value);
                 }
+                MosaicServerToStore.SaveCurrentWins(listInfos);
             }
         }
 
@@ -284,11 +302,11 @@ namespace ScreenManagerNS
                     
                     if (!screen.IsMirror)
                     {
-                        Multi_ResumeCurrentWinsAndMirrors(screen, false);
+                        Multi_ResumeCurrentWinsAndMirrors(screen,false, false);
                     }
                     else
                     {
-                        UpdateMirrorWinsFromMasterWall(screen);
+                        UpdateMirrorWinsFromMasterWall(screen,false);
                     }
                 }
             }
@@ -298,7 +316,7 @@ namespace ScreenManagerNS
         /// </summary>
         /// <param name="screen">主屏</param>
         /// <param name="isSynchroMirrors">是否更新到镜像屏 ，默认true</param>
-        private void Multi_ResumeCurrentWinsAndMirrors(ScreenViewModel screen ,bool isSynchroMirrors=true)
+        private void Multi_ResumeCurrentWinsAndMirrors(ScreenViewModel screen, bool isClearScreen = true, bool isSynchroMirrors=true)
         {
             //hsServer.ShowDebug("Debug-----------Multi_ResumeCurrentWinsAndMirrors");
             if (screen == null || screen.IsMirror )  //镜像屏不处理，由主屏附带处理
@@ -314,19 +332,22 @@ namespace ScreenManagerNS
             //{
             //    return;
             //}
-
-            if (MosaicWinToRx!=null)
+            if (isClearScreen)
             {
-                MosaicWinToRx.WallClear(screen.IdScreen);
-                if (isSynchroMirrors)
+                if (MosaicWinToRx != null)
                 {
-                    for (int i = 0; i < screen.ListMirrors.Count; i++)
+                    MosaicWinToRx.WallClear(screen.IdScreen);
+                    if (isSynchroMirrors)
                     {
-                        ScreenViewModel mirror = screen.ListMirrors[i];
-                        MosaicWinToRx.WallClear(mirror.IdScreen);
+                        for (int i = 0; i < screen.ListMirrors.Count; i++)
+                        {
+                            ScreenViewModel mirror = screen.ListMirrors[i];
+                            MosaicWinToRx.WallClear(mirror.IdScreen);
+                        }
                     }
                 }
             }
+            
             List<HsMosaicWinInfo> winInfos = new List<HsMosaicWinInfo>();
             List<TxInfo> txInfos = new List<TxInfo>();
 
@@ -391,7 +412,7 @@ namespace ScreenManagerNS
         /// 更新镜像屏（若绑定有Rx和关联主屏），则更新同步主屏的当前模式
         /// </summary>
         /// <param name="screen">镜像屏</param>
-        private void UpdateMirrorWinsFromMasterWall(ScreenViewModel screen)
+        private void UpdateMirrorWinsFromMasterWall(ScreenViewModel screen, bool isClearScreen = true)
         {
              
             if (screen == null || !screen.IsMirror||screen.BindMasterId<1)  
@@ -410,7 +431,10 @@ namespace ScreenManagerNS
             }
             if (MosaicWinToRx != null)
             {
-                MosaicWinToRx.WallClear(screen.IdScreen);
+                if (isClearScreen)
+                {
+                    MosaicWinToRx.WallClear(screen.IdScreen);
+                }               
 
                 List<HsMosaicWinInfo> winInfos = new List<HsMosaicWinInfo>();
                 List<TxInfo> txInfos = new List<TxInfo>();
@@ -500,9 +524,15 @@ namespace ScreenManagerNS
                 {
                     ScreenViewModel mirror = screen.ListMirrors[i];
                     Rect rectMirrorWin = Rect.ConverterRect0ToRect1(Win.Position, screen.ReferTotalPixels, mirror.ReferTotalPixels);
-                    Rect mirroNewWin= mirror.RectifyPostion(rectMirrorWin, hsConfig.WinRectRate);
+
+                    rectMirrorWin.Width = rectMirrorWin.Width < 128 ? 128 : rectMirrorWin.Width;
+                    rectMirrorWin.Height = rectMirrorWin.Height < 72 ? 72 : rectMirrorWin.Height;
+
+                    Rect mirroNewWin = mirror.RectifyPostionToMirror(rectMirrorWin, hsConfig.MirrorWinRectRate);
+
                     if (mirroNewWin.IsEmpty)
                     {
+                        hsServer.ShowDebug($"缩放到的镜像屏窗口尺寸不符要求 IdWin：{idWin}--{rectMirrorWin}");
                         mirroNewWin = rectMirrorWin;
                     }
 
@@ -519,7 +549,7 @@ namespace ScreenManagerNS
             else
             {
                 hsServer.ShowDebug("当前信号源TxInfo不在线：" + Win.IdTx);
-                return;
+                //return;
             }               
 
             if (winInfos.Count > 0)  //同步镜像屏的当前窗口
@@ -792,22 +822,31 @@ namespace ScreenManagerNS
         }
         public void Event_GetMosaicWall(Json_Rec_Hs_Cmd_End end, List<HsScreenInfo> listScreenInfo)
         {
-            foreach (var item in listScreenInfo)
-            {
-                ScreenViewModel screen = null;
-                Screens.TryGetValue(item.IdScreen, out screen);
-                if (screen != null)
-                {
-                    listScreenInfo.Add(screen);
-                }
-                else
-                {
-                    end.Err_str += item + " null ";
-                }
-            }
             if (listScreenInfo.Count == 0)
             {
                 foreach (var item in Screens.Values)
+                {
+                    listScreenInfo.Add(item);
+                }
+            }
+            else
+            {
+                List<HsScreenInfo> tempList = new List<HsScreenInfo>();
+                foreach (var item in listScreenInfo)
+                {
+                    ScreenViewModel screen = null;
+                    Screens.TryGetValue(item.IdScreen, out screen);
+                    if (screen != null)
+                    {
+                        tempList.Add(screen);
+                    }
+                    else
+                    {
+                        end.Err_str += item + " null ";
+                    }
+                }
+                listScreenInfo.Clear();
+                foreach (var item in tempList)
                 {
                     listScreenInfo.Add(item);
                 }

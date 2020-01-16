@@ -89,5 +89,8 @@ namespace ConfigServer
         public static string SendRx_MultiIp = "234.234.0.1";  //V2.0 Rx端接收开窗组播Ip
         public static int SendRx_MultiPort = 32110;           //V2.0 Rx端接收开窗组播Port
 
+        public static int TxOnlineToResolution = 3;  //Tx上线延时查询resolution时间
+        public static double MirrorWinRectRate = 0.1;  //镜像屏窗口磁贴，附加若窗口小于最小尺寸，放大
+
     }
 }

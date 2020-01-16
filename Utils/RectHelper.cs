@@ -154,10 +154,10 @@ namespace Utils
         public static Rect ConverterRect0ToRect1(Rect r0, Rect r1, Rect r2)
         {
              
-            int pX0 = ((r0.X - r1.X) / r1.Width) * r2.Width + r2.X;
-            int pY0 = ((r0.Y - r1.Y) / r1.Height) * r2.Height + r2.Y;
-            int pX1 = (r0.Width / r1.Width) * r2.Width; //宽度
-            int pY1 = (r0.Height / r1.Height) * r2.Height; //高度
+            int pX0 = ((r0.X - r1.X) * r2.Width / r1.Width)  + r2.X;  //修正为int整除适应
+            int pY0 = ((r0.Y - r1.Y) * r2.Height / r1.Height)  + r2.Y;
+            int pX1 = (r0.Width*r2.Width / r1.Width); //宽度
+            int pY1 = (r0.Height * r2.Height / r1.Height) ; //高度
             return new Rect(pX0, pY0, pX1, pY1);
              
         }

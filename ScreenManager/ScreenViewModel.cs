@@ -241,6 +241,30 @@ namespace ScreenManagerNS
             //}
 
         }
+
+        public void UpdateCurrentViewModelWinToInfo()
+        {
+            CurrentWins.Clear();
+            foreach (var item in ListRoamWines)
+            {
+                if (item.IsEnable)
+                {
+                    HsMosaicWinInfo winInfo = new HsMosaicWinInfo()
+                    {
+                        IdWin = item.IdWin,
+                        ZIndex = item.ZIndex,
+                        IdTx = item.IdTx,
+                        X = (int)item.Position.X,
+                        Y = (int)item.Position.Y,
+                        Width = (int)item.Position.Width,
+                        Height = (int)item.Position.Height
+                    };
+                    CurrentWins.Add(winInfo);
+                }
+            }
+        }
+
+
         //public void UpdateCurrentViewModelWinToInfo()
         //{
         //    ScreenInfo.CurrentWins.Clear();
@@ -302,7 +326,7 @@ namespace ScreenManagerNS
         //    });
         //}
 
-         
+
         /// <summary>
         /// 只判断和更新ScreenViewModel的数据，和MosaicServerToRx的数据更新
         /// </summary>
@@ -511,6 +535,106 @@ namespace ScreenManagerNS
             return newP;
         }
 
+        /// <summary>
+        /// 镜像屏附加的窗口磁贴及缩放最小窗口放大功能
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="rate"></param>
+        /// <param name="uniteW"></param>
+        /// <param name="uniteH"></param>
+        /// <returns></returns>
+        public Rect RectifyPostionToMirror(Rect position, double rate = 0, int uniteW = 1920, int uniteH = 1080)
+        {
+            Rect newP = position;
+            Rect totalPixels = new Rect(StartX, StartY, WallPixW, WallPixH); 
+            if (position.X < StartX || position.Y < StartY || position.Right > totalPixels.Right || position.Bottom > totalPixels.Bottom)
+            {
+                return Rect.Empty;
+            }
+            if (rate == 0 || rate < 0.1 || rate > 0.3)
+            {
+                return newP;
+            }
+
+            int wOff = (int)(uniteW * rate);
+            int hOff = (int)(uniteH * rate);
+            int x1Remainder = (int)position.X % uniteW;
+            if (x1Remainder < wOff)
+            {
+                if (newP.X - x1Remainder <= StartX)
+                {
+                    newP.X = StartX;
+                    newP.Width = (int)position.Right - StartX;
+                }
+                else
+                {
+                    newP.X = newP.X - x1Remainder;
+                    newP.Width += x1Remainder;
+                }
+            }
+            else if (uniteW - x1Remainder < wOff)
+            {
+                newP.X += uniteW - x1Remainder;
+                if (position.Right % uniteW < wOff)
+                {
+                    newP.Width -= x1Remainder;
+                }
+            }
+
+            int x2Remainder = (int)newP.Right % uniteW;
+            if (x2Remainder < wOff)
+            {
+                newP.Width -= x2Remainder;
+            }
+            else if (uniteW - x2Remainder <= wOff)
+            {
+                newP.Width = newP.Right + uniteW - x2Remainder > totalPixels.Right ? totalPixels.Right - newP.X : newP.Width + uniteW - x2Remainder;
+            }
+            if (newP.Width == 0)
+            {
+                return Rect.Empty;
+            }
+
+            int y1Remainder = (int)position.Y % uniteH;
+            if (y1Remainder < hOff)
+            {
+                if (newP.Y - y1Remainder <= StartY)
+                {
+                    newP.Y = StartY;
+                    newP.Height = (int)position.Bottom - StartY;
+                }
+                else
+                {
+                    newP.Y = newP.Y - y1Remainder;
+                    newP.Height += y1Remainder;
+                }
+            }
+            else if (uniteH - y1Remainder < hOff)
+            {
+                newP.Y += uniteH - y1Remainder;
+                if (position.Bottom % uniteH < hOff)
+                {
+                    newP.Height -= y1Remainder;
+                }
+            }
+
+            int y2Remainder = (int)newP.Bottom % uniteH;
+            if (y2Remainder < wOff)
+            {
+                newP.Height -= y2Remainder;
+            }
+            else if (uniteH - y2Remainder <= wOff)
+            {
+                newP.Height = newP.Bottom + uniteH - y2Remainder > totalPixels.Bottom ? totalPixels.Bottom - newP.Y : newP.Height + uniteH - y2Remainder;
+            }
+            if (newP.Height == 0)
+            {
+                return Rect.Empty;
+            }
+
+            return newP;
+        }
+
         #region V2.0 协议内部处理方法-----
 
         /// <summary>
@@ -657,8 +781,8 @@ namespace ScreenManagerNS
             {                 
               
                 Win.IsEnable = true;
-                 
 
+                Win.IdTx = rw.IdTx;
                 rw.IdWin = Win.IdWin;
                 rw.ZIndex = ListRoamWines.Count(c => c.IsEnable);  //默认开窗在最上层。。。
                 Win.ZIndex = rw.ZIndex;
@@ -895,6 +1019,10 @@ namespace ScreenManagerNS
                 screenInfo.StartY = StartY;
                 screenInfo.WallPixW = WallPixW;
                 screenInfo.WallPixH = WallPixH;
+                screenInfo.Rows = Rows;
+                screenInfo.Columns = Columns;
+                screenInfo.UnitWidth = UnitWidth;
+                screenInfo.UnitHeight = UnitHeight;
                 foreach (var item in ListRoamWines)
                 {
                     if (item.IsEnable)

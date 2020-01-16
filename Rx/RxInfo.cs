@@ -42,7 +42,7 @@ namespace RxNS
                     isOnline = value;
                     if (isOnline)
                     {
-                        ActionOnline?.BeginInvoke(this, null, null); //上线触发
+                        ActionOnline?.Invoke(this); //上线触发
                     }
                 }
             }
